@@ -11,5 +11,5 @@ cd ${0%/*}
 
 # zip and then rename to .xpi
 zip -r "$ZIPFILE" * -x \*.swp -x \*.xpi \
-  && mv "$ZIPFILE" "${ZIPFILE%zip}.xpi"
+  && mv "$ZIPFILE" "${ZIPFILE%.zip}.xpi"
 
