@@ -19,6 +19,7 @@
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
+ * Adam Katz <https://github.com/adamhotep> <https://twitter.com/adamhotep>
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -152,6 +153,8 @@ ContactPhotos.init = function ContactPhotos_init(aURI) {
     imgBox.setAttribute("tooltiptext",
                         ContactPhotos.StringBundle.getString("imgTooltip"));
     img.onclick = function (e) {
+      // TODO: adjust this to work for sent addresses
+      if (this.classList.contains("sentMessage")) { return; }
       // if there isn't a current contact or AB then don't do anything
       if (!ContactPhotos.mCurrentContact || !ContactPhotos.mCurrentContact) {
         alert(ContactPhotos.StringBundle.getString("addBeforeClick"));
@@ -229,6 +232,18 @@ ContactPhotos.AddExtraAddressProcessing = function CP_extraAdrProcessing(aEmail,
       ContactPhotos.mCurrentContact = null;
       ContactPhotos.mCurrentAb      = null;
 
+      if (gMessageDisplay.displayedMessage.folder.name.match(/^(?:Sent|Draft|Outbo)/)) {
+        let compFields = Components.classes["@mozilla.org/messengercompose/composefields;1"]
+                                   .createInstance(Components.interfaces.nsIMsgCompFields);
+        let recipients = compFields.splitRecipients(
+          gMessageDisplay.displayedMessage.recipients, true, {});
+        if (recipients) {
+          aEmail = recipients[0];  // TODO: blend/stack images for 2+ recipients
+          photoElem.classList.add("sentMessage");
+          imgBox.removeAttribute("tooltiptext");  // TODO: fix clicking for sent
+        }
+      }
+
       // Seamonkey doesn't use the hascard attribute and doesn't search the ABs
       // for the contact, so do so manually if necessary
       if (aNode.getAttribute("hascard") === "") {
@@ -245,6 +260,17 @@ ContactPhotos.AddExtraAddressProcessing = function CP_extraAdrProcessing(aEmail,
         photoURI  = ContactPhotos.getPhotoURI(card.getProperty("PhotoName", null));
       }
 
+      // the e-mail address, lowercased & trimmed of leading/trailing spaces
+      var address = aEmail.toLowerCase().trim();
+
+      if (photoURI === defaultPhotoURI) {
+
+        var ext = ["svg", "png", "gif", "jpg", "jpeg", "ico", "bmp"];
+        for (let e = 0; photoURI === defaultPhotoURI && e < ext.length; e++) {
+          photoURI = ContactPhotos.getPhotoURI(address + "." + ext[e]);
+        }
+      }
+
       // use a gravatar if we still have the default URI, if the gravatar pref is
       // true, and if the user is online
       // TB 3 has MailOfflineMgr.isOnline() and SM 2 has CheckOnline()...
@@ -252,13 +278,29 @@ ContactPhotos.AddExtraAddressProcessing = function CP_extraAdrProcessing(aEmail,
       if (photoURI === defaultPhotoURI &&
           ContactPhotos.Preferences.mGravatar &&
           ContactPhotos.mIOService && !ContactPhotos.mIOService.offline) {
-        // take the hash of the e-mail address (should be all lowercase and
-        // trimmed of leading/trailing whitespace)
-        let hash = GlodaUtils.md5HashString(aEmail.toLowerCase().trim());
-        photoURI = "http://www.gravatar.com/avatar/" + encodeURIComponent(hash) +
-                   "?d=" + encodeURIComponent(ContactPhotos.Preferences.mGravatarD);
+        let dirRegex = ContactPhotos.Preferences.mDirRegex;
+        let dirURI = ContactPhotos.Preferences.mDirURI;
+        let dirMatch = null;
+        if (dirRegex && dirURI) {
+          dirMatch = address.match(RegExp(dirRegex));
+        }
+        if (dirMatch) {
+          photoURI = dirURI;
+          for (let m = 1; m < dirMatch.length; m++) {
+            photoURI = photoURI.replace(RegExp('\\$' + m), dirMatch[m]);
+          }
+        } else {
+          // take the hash of the e-mail address
+          let hash = GlodaUtils.md5HashString(address);
+          photoURI = "https://secure.gravatar.com/avatar/" + encodeURIComponent(hash) +
+                     "?d=" + encodeURIComponent(ContactPhotos.Preferences.mGravatarD);
+        }
       }
-      photoElem.setAttribute("src", photoURI);
+
+      if (photoURI !== defaultPhotoURI) {
+        photoElem.setAttribute("src", photoURI);
+      }
+
     }
   }
   catch (e) { ContactPhotos.reportError(e); }
@@ -380,10 +422,10 @@ ContactPhotos.getPhotosDir = function CP_getPhotosDir() {
   var file = Components.classes["@mozilla.org/file/directory_service;1"]
                        .getService(Components.interfaces.nsIProperties)
                        .get("ProfD", Components.interfaces.nsIFile);
-  // Get the Photos directory
+  // Get the Photos directory (TODO: make configurable? Separate from addy@?)
   file.append("Photos");
   if (!file.exists() || !file.isDirectory()) {
-    file.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0777);
+    file.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0o777);
   }
   return file;
 };

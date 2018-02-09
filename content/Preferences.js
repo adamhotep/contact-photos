@@ -19,6 +19,7 @@
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
+ * Adam Katz <https://github.com/adamhotep> <https://twitter.com/adamhotep>
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -73,6 +74,8 @@ ContactPhotos.Preferences = {
   mGravatar:      true,
   mGravatarD:     "identicon",
   mImgBorder:     "1px solid black",
+  mDirRegex:      "",
+  mDirURI:        "",
   /** The pref branch for this add-on */
   mPrefBranch: Components.classes["@mozilla.org/preferences-service;1"]
                         .getService(Components.interfaces.nsIPrefService)
@@ -92,6 +95,8 @@ ContactPhotos.Preferences = {
     this.mGravatarD       = this.mPrefBranch.getCharPref("gravatarD");
     this.mImgBorder       = this.mPrefBranch.getCharPref("imgBorder");
     this.mImgBorderRadius = this.mPrefBranch.getCharPref("imgBorderRadius");
+    this.mDirRegex        = this.mPrefBranch.getCharPref("dirRegex");
+    this.mDirURI          = this.mPrefBranch.getCharPref("dirURI");
 
     // nsIPrefBranch2 was merged into nsIPrefBranch in Gecko 13 (TB 13/SM 2.10)
     // TB 57 removed support for it.
@@ -185,6 +190,12 @@ ContactPhotos.Preferences = {
             img.style.borderRadius  =
               this.mImgBorderRadius;
         }
+        break;
+      case "dirRegex":
+        this.mDirRegex = this.mPrefBranch.getCharPref("dirRegex");
+        break;
+      case "dirURI":
+        this.mDirURI = this.mPrefBranch.getCharPref("dirURI");
         break;
     }
   }

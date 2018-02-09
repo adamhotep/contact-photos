@@ -23,3 +23,13 @@
 <!ENTITY monster.label          "Monster">
 <!ENTITY retro.label            "Retro">
 <!ENTITY wavatar.label          "Wavatar">
+<!ENTITY robohash.label         "RoboHash">
+
+<!-- Online User Directory options -->
+<!ENTITY dir.tab                "Directory">
+<!ENTITY dirDesc1.label         "Enter a regular expression with at least one maching group for your Directory RegEx.">
+<!ENTITY dirDesc2.label         "The Directory URI should contain variables like $1 and $2 to correspond to each match.">
+<!ENTITY dir.label              "Online User Directory">
+<!ENTITY dirRegex.value         "Email RegEx">
+<!ENTITY dirURI.value           "Directory URI">
+<!ENTITY example.label          "Example">

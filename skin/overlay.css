@@ -9,6 +9,9 @@ radio[pane=pane_main] {
 radio[pane=pane_gravatars] {
   list-style-image: url("chrome://contactphotos/skin/gravatars.png");
 }
+radio[pane=pane_directory] {
+  list-style-image: url("chrome://contactphotos/skin/user-dir.png");
+}
 
 /* Originally written by Leszek(teo)Życzkowski, taken from gContactSync */
 radio[pane] {

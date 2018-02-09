@@ -20,6 +20,7 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   - Adam Katz <https://github.com/adamhotep> <https://twitter.com/adamhotep>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -129,8 +130,45 @@
                         <menuitem value="monsterid" label="&monster.label;"/>
                         <menuitem value="retro"     label="&retro.label;"/>
                         <menuitem value="wavatar"   label="&wavatar.label;"/>
+                        <menuitem value="robohash"  label="&robohash.label;"/>
                      </menupopup>
                   </menulist>
+               </row>
+            </rows>
+         </grid>
+      </groupbox>
+    </vbox>
+  </prefpane>
+  <prefpane id="pane_directory" label="&dir.tab;">
+    <preferences>
+      <preference id="dirRegex"
+                  name="extensions.contactphotos.dirRegex"
+                  type="string"/>
+      <preference id="dirURI"
+                  name="extensions.contactphotos.dirURI"
+                  type="string"/>
+    </preferences>
+    <vbox>
+      <groupbox id="directory">
+         <caption label="&dir.label;"/>
+         <label value="&dirDesc1.label;"/>
+         <label value="&dirDesc2.label;"/>
+         <grid>
+            <columns>
+               <column/>
+               <column flex="2"/>
+            </columns>
+            <rows>
+               <row align="center">
+                  <label control="dirRegexBox" value="&dirRegex.value;"/>
+                  <textbox preference="dirRegex" id="dirRegexBox" maxlength="1024"
+                           style="font-family:monspace"
+                           tooltiptext="&example.label;: ^(.*)@example\.com$"/>
+               </row>
+               <row align="center">
+                  <label control="dirURIBox" value="&dirURI.value;"/>
+                  <textbox preference="dirURI" id="dirURIBox" maxlength="1024"
+                           tooltiptext="&example.label;: https://example.com/photos/$1.jpg"/>
                </row>
             </rows>
          </grid>
