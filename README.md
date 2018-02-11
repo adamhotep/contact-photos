@@ -11,6 +11,6 @@ Notable additions:
 * Now supporting [RoboHash](https://robohash.org/) Gravatars
 
 You can download my fork of Contact Photos 1.0.1 here:
-* [contact_photos+adamhotep-1.0.1-1.xpi](https://github.com/adamhotep/contact-photos/raw/master/contact_photos%2Badamhotep-1.0.1-1.xpi)
+* [contact_photos+adamhotep-1.0.1-2.xpi](https://github.com/adamhotep/contact-photos/raw/master/contact_photos%2Badamhotep-1.0.1-2.xpi)
 
 Note, it is not signed; you may need to tweak your about:config to allow that.
