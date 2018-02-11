@@ -13,4 +13,7 @@ Notable additions:
 You can download my fork of Contact Photos 1.0.1 here:
 * [contact_photos+adamhotep-1.0.1-2.xpi](https://github.com/adamhotep/contact-photos/raw/master/contact_photos%2Badamhotep-1.0.1-2.xpi)
 
+See also
+* Contact Photos forum announcement [I have updated Contact Photos to support showing recipients, more](http://pirules.org/forum/index.php/topic,820.0.html)
+
 Note, it is not signed; you may need to tweak your about:config to allow that.
