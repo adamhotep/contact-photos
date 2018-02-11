@@ -232,7 +232,10 @@ ContactPhotos.AddExtraAddressProcessing = function CP_extraAdrProcessing(aEmail,
       ContactPhotos.mCurrentContact = null;
       ContactPhotos.mCurrentAb      = null;
 
-      if (gMessageDisplay.displayedMessage.folder.name.match(/^(?:Sent|Draft|Outbo)/)) {
+      if (gMessageDisplay.displayedMessage.folder
+          && gMessageDisplay.displayedMessage.folder.name.match(
+               /^(?:Sent|Draft|Outbo)/))
+      {
         let compFields = Components.classes["@mozilla.org/messengercompose/composefields;1"]
                                    .createInstance(Components.interfaces.nsIMsgCompFields);
         let recipients = compFields.splitRecipients(
@@ -240,7 +243,8 @@ ContactPhotos.AddExtraAddressProcessing = function CP_extraAdrProcessing(aEmail,
         if (recipients) {
           aEmail = recipients[0];  // TODO: blend/stack images for 2+ recipients
           photoElem.classList.add("sentMessage");
-          imgBox.removeAttribute("tooltiptext");  // TODO: fix clicking for sent
+          document.getElementById("msgHdrFromPhotoBox")
+            .removeAttribute("tooltiptext");  // TODO: fix clicking for sent
         }
       }
 
